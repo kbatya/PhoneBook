@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PhoneBook.Views.ViewContactsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:PhoneBook.Helpers"
+    Title="ViewContactsPage">
+    <VerticalStackLayout>
+
+        <Grid
+            Padding="10"
+            ColumnSpacing="3"
+            RowDefinitions="*,5*"
+            RowSpacing="2">
+
+            <Label
+                FontSize="26"
+                HorizontalOptions="Center"
+                Text="List contacts"
+                VerticalOptions="Center" />
+
+            <!--  Filters  -->
+            <Grid
+                Grid.Row="1"
+                Margin="3"
+                ColumnDefinitions="*,*"
+                ColumnSpacing="3"
+                RowDefinitions="*,*"
+                RowSpacing="6">
+                <Label
+                    Grid.Row="1"
+                    Text="Contact type"
+                    VerticalOptions="Center" />
+
+                <Picker
+                    Title="Contact type"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding ContactTypes}"
+                    SelectedItem="{Binding SelectedType}"
+                    TextColor="DarkBlue"
+                    TitleColor="RosyBrown"
+                    ToolTipProperties.Text="select between family,work,cellular" />
+
+
+
+
+                <Button
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    HeightRequest="40"
+                    Text="Filter by contact type"
+                    VerticalOptions="Start" />
+
+
+            </Grid>
+
+            <!--  lets do  -->
+
+
+            <!--  CollectionView  -->
+
+            <!--  End CollectionView  -->
+            <!--  end refresh  -->
+
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>

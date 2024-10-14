@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PhoneBook.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:PhoneBook.Helpers"
+    xmlns:viewmodels="clr-namespace:PhoneBook.ViewModels"
+    Title="Animals Photo Gallery"
+    x:DataType="viewmodels:LoginViewModel">
+
+
+    <StackLayout Padding="20" VerticalOptions="Center">
+        <Grid RowDefinitions="5*,*,*,*,*,*,*">
+            <Image
+                HeightRequest="300"
+                Source="login_image.png"
+                WidthRequest="300" />
+            <Label
+                Grid.Row="1"
+                Margin="0,0,0,20"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                Text="Login"
+                TextColor="BlueViolet" />
+
+            <Label Grid.Row="2" Text="User name" />
+            <Entry
+                Grid.Row="3"
+                Placeholder="Enter user name"
+                Text="{Binding Username}" />
+
+            <Label Grid.Row="4" Text="Password" />
+
+            <Entry
+                Grid.Row="5"
+                IsPassword="{Binding IsPasswordVisible}"
+                Placeholder="Enter password"
+                Text="{Binding Password}" />
+            <Button
+                Grid.Row="5"
+                Command="{Binding TogglePasswordVisibilityCommand}"
+                HorizontalOptions="End"
+                Text="&#x1F441;" />
+
+
+            <Label
+                Grid.Row="6"
+                Text="{Binding ErrorMessage}"
+                TextColor="{Binding ErrorColor}" />
+            <Grid Grid.Row="7" ColumnDefinitions="*,*">
+                <Button
+                    Margin="0,20,0,0"
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding IsLoginEnabled}"
+                    Text="Login" />
+                <Button
+                    Grid.Column="1"
+                    Margin="10,20,0,0"
+                    Command="{Binding CancelCommand}"
+                    IsEnabled="{Binding IsCancelEnabled}"
+                    Text="Cancel" />
+
+            </Grid>
+        </Grid>
+    </StackLayout>
+</ContentPage>

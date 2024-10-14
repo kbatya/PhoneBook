@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PhoneBook.Views.AddContactsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:PhoneBook.Helpers"
+    xmlns:local="clr-namespace:PhoneBook.Views"
+    xmlns:viewModels="clr-namespace:PhoneBook.ViewModels"
+    Title="AddContactPage"
+    x:DataType="viewModels:AddContactsPageViewModel">
+    <VerticalStackLayout>
+        <!--  Screen Title  -->
+        <Label
+            FontFamily="MaterialSymbols"
+            FontSize="120"
+            HorizontalOptions="Center"
+            Text="{x:Static helpers:IconFont.Person_add}"
+            TextColor="Purple"
+            VerticalOptions="Center" />
+        <Label
+            FontAttributes="Bold"
+            FontFamily="AlmogRegular"
+            FontSize="40"
+            HorizontalTextAlignment="Center"
+            Text="New contact" />
+        <!--  Grid 4*2 for Adding a new Contact  -->
+        <Grid
+            Margin="15"
+            ColumnDefinitions="*,2*"
+            ColumnSpacing="2"
+            RowDefinitions="*,*,*"
+            RowSpacing="13">
+
+            <!--  Contact name and error messaage line 0  -->
+
+            <Label Text="Contact name" VerticalOptions="Center" />
+
+            <Entry
+                Grid.Column="1"
+                ClearButtonVisibility="WhileEditing"
+                Placeholder="Contact name"
+                ReturnType="Next"
+                Text="{Binding Name}"
+                VerticalOptions="Center" />
+
+            <!--  error message  -->
+            <Label
+                Grid.Column="1"
+                Margin="0,65,0,0"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                IsVisible="{Binding HasError}"
+                Text="{Binding ErrorMessage}"
+                TextColor="Red" />
+
+            <!--  contact type line 1  -->
+            <Label
+                Grid.Row="1"
+                Text="Contact type"
+                VerticalOptions="Center" />
+
+            <Picker
+                Title="Contact type"
+                Grid.Row="1"
+                Grid.Column="1"
+                ItemDisplayBinding="{Binding Name}"
+                ItemsSource="{Binding ContactTypes}"
+                SelectedItem="{Binding SelectedType}"
+                TextColor="DarkBlue"
+                TitleColor="RosyBrown"
+                ToolTipProperties.Text="select between family,work,cellular" />
+
+            <!--  Contact phone number line 2  -->
+            <Label
+                Grid.Row="2"
+                Text="Phone number"
+                VerticalOptions="Center" />
+            <Editor
+                Grid.Row="2"
+                Grid.Column="1"
+                Keyboard="Telephone"
+                Placeholder="Phone number"
+                Text="{Binding PhoneNumber}" />
+        </Grid>
+
+        <!--  כפתורי פעולה  -->
+        <Grid
+            Margin="15,0"
+            ColumnDefinitions="*,*"
+            ColumnSpacing="2">
+            <Button
+                Command="{Binding AddContactCommand}"
+                CommandParameter="{Binding Text, Source={x:RelativeSource Mode=Self}}"
+                IsEnabled="{Binding CanAddContact}"
+                Text="Add contact" />
+
+
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>
