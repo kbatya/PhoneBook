@@ -5,19 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using PhoneBook.Models;
 using Contact = PhoneBook.Models.Contact;
-
+using System.Text.Json;
 namespace PhoneBook.Services
 {
     //DAL in future
-    class ContactService : IContactService
+    public class ContactService : IContactService
     {
         int id;
         List<Contact>? contacts;
         List<ContactTypes>? contactTypes;
+        User user;
         public ContactService()
         {
             InitContactTypes();
             InitContacts();
+            InitUser();
             id = 0;
         }
 
@@ -27,7 +29,7 @@ namespace PhoneBook.Services
         {
             new ContactTypes()
             {
-                Id = 1, Name = "work"
+                Id = 1, Name = "enemy"
             },
 
             new ContactTypes()
@@ -36,9 +38,18 @@ namespace PhoneBook.Services
             },
             new ContactTypes()
             {
-            Id = 3, Name = "cellular"
+            Id = 3, Name = "friend"
+            },
+            new ContactTypes()
+            {
+            Id = 4, Name = "stranger"
             }
         };
+        }
+
+        private void InitUser()
+        {
+            user = new User() { Name = "Batya Bukhel", Username = "batya.bukhel@gmail.com", Password = "diMa1972$" };                                          
         }
 
         private void InitContacts()
@@ -50,8 +61,10 @@ namespace PhoneBook.Services
                     Id=++id,
 
 
-                    Name="Dima",
-                    PhoneNumber="0528505152",
+                    Name="Keir Starmer",
+                    Image="starmer.jpg",
+                    PhoneNumber="0523545352",
+                    CountryFlag="united_kingdom.png",
                     Type=contactTypes[2]
                 },
                 new Contact()
@@ -59,34 +72,72 @@ namespace PhoneBook.Services
                     Id=++id,
 
 
-                    Name="Tamara",
-                    PhoneNumber="0586278749",
-                    Type=contactTypes[1]
+                    Name="Vladimir Putin",
+                    Image="putin.jpg",
+                    PhoneNumber="0587378749",
+                    CountryFlag="russia.png",
+                    Type=contactTypes[3]
                 },
                 new Contact()
                 {
                     Id=++id,
 
 
-                    Name="Rosa",
+                    Name="Donald Trump",
+                    Image="trump.jpg",
                     PhoneNumber="0587987719",
-                    Type=contactTypes[0]
+                    CountryFlag="united_states.png",
+                    Type=contactTypes[2]
                 },
                 new Contact()
                 {
                     Id=++id,
 
-                    Name="Caleb",
+                    Name="Emmanuel Macron",
+                    Image="macron.jpg",
                     PhoneNumber="0587382619",
-                    Type=contactTypes[1]
-                }
+                    CountryFlag="france.png",
+                    Type=contactTypes[3]
+                },
+                new Contact()
+                {
+                    Id=++id,
 
+                    Name="Yoon Suk Yeol",
+                    Image="yeol.jpg",
+                    PhoneNumber="0587886119",
+                    CountryFlag="south_kore.png",
+                    Type=contactTypes[3]
+                },
+                
+                new Contact()
+                {
+                    Id=++id,
+
+                    Name="Ali Hosseini Khamenei",
+                    Image="khameini.jpg",
+                    PhoneNumber="0581111119",
+                    CountryFlag="iran.png",
+                    Type=contactTypes[0]
+                }
             };
         }
 
+        public User getUser
+        {
+            get
+            {
+                return user;
+            }
+        }
         public List<Contact>? GetContacts()
         {
             return contacts?.ToList();
+        }
+
+        public List<ContactTypes>? GetContactTypes()
+        {
+            return contactTypes?.ToList();
         }
 
         public List<Contact> GetContactByType(ContactTypes type)
@@ -124,9 +175,38 @@ namespace PhoneBook.Services
                     return contacts.Remove(t);
             }
             return false;
-            #region using LINQ
-            // return Contacts.Remove(Contacts.Find((x)=>x.Id==Contact.Id));
-            #endregion
+            
+        }
+
+        public User Login(string username, string password)
+        {
+            string savedJson = Preferences.Default.Get("userObj", string.Empty);
+            User user = JsonSerializer.Deserialize<User>(savedJson);
+            if (user is not null && user.Username == username && user.Password == password) 
+                return user;
+            return null;    
+        }
+
+        public bool Register(User user)
+        {
+            if (user is not null)
+            {
+                Preferences.Default.Set("userObj", JsonSerializer.Serialize(user));
+                return true;
+            }
+            return false;
+
+        }
+
+        public bool UpdateUser(User user)
+        {
+            if (user is not null && this.user is not null && this.user.Username == user.Username)
+            {
+                //update user in preferences
+                this.user = user;
+                return true;
+            }
+            return false;
         }
     }
 

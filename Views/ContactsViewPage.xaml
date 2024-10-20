@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    1)add xmlns for viewmodels and models and
+    2)add x:DataType for autocomplete from viewmodel
+-->
+<ContentPage
+    x:Class="PhoneBook.Views.ContactsViewPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:PhoneBook.Helpers"
+    xmlns:models="clr-namespace:PhoneBook.Models"
+    xmlns:viewmodels="clr-namespace:PhoneBook.ViewModels"
+    x:DataType="viewmodels:ContactsPageViewModel">
+
+
+
+
+    <Grid
+        Padding="10"
+        ColumnSpacing="3"
+        RowDefinitions="*,*,5*,*"
+        RowSpacing="2">
+        <Label
+            FontFamily="AlmogRegular"
+            FontSize="26"
+            HorizontalOptions="Center"
+            Text="Phone book contacts list"
+            VerticalOptions="Center" />
+
+        <!--  Filters  -->
+        <Grid
+            Grid.Row="1"
+            Margin="3"
+            ColumnDefinitions="*,*"
+            ColumnSpacing="3"
+            RowDefinitions="*,*"
+            RowSpacing="6" />
+
+        <!--  lets do refresh  -->
+        <RefreshView
+            Grid.Row="2"
+            Command="{Binding RefreshCommand}"
+            IsRefreshing="{Binding IsRefreshing}">
+
+            <!--  CollectionView  -->
+
+            <CollectionView
+                ItemsSource="{Binding Contacts}"
+                SelectedItem="{Binding SelectedContact}"
+                SelectionChangedCommand="{Binding ShowDetailsCommand}"
+                SelectionMode="Single">
+                <!--  ItemsLayouts  -->
+                <!--
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Span="2" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+                -->
+                <CollectionView.EmptyView>
+
+                    <StackLayout>
+                        <Image Source="login_image.png" />
+                        <Label HorizontalTextAlignment="Center" Text="there is no contacts" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Contact">
+                        <SwipeView>
+                            <!--  SwipeView.TopItems,SwipeView.RightItems,SwipeView.BottomItems  -->
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <!--  Binding .   : means pass the whole object as parameter  -->
+                                    <!--
+                                        DeleteCommand belongs to the view model but in the collectioview
+                                        we are running under DataType=Toy so we need
+                                        to reference Source to find the BindingContext with the viewmodel
+                                        x:RelativeSource enables us to auto search the viewmodel in the visual tree
+                                    -->
+                                    <SwipeItem
+                                        BackgroundColor="Pink"
+                                        Command="{Binding DeleteCommand, Source={x:RelativeSource AncestorType={x:Type viewmodels:ContactsPageViewModel}, Mode=FindAncestorBindingContext}}"
+                                        CommandParameter="{Binding .}"
+                                        Text="delete">
+                                        <SwipeItem.IconImageSource>
+                                            <FontImageSource FontFamily="MaterialSymbols" Glyph="{x:Static helpers:IconFont.Delete}" />
+                                        </SwipeItem.IconImageSource>
+
+
+
+                                        <!--  navigation button  -->
+                                    </SwipeItem>
+
+
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+
+
+                            <!--  advanced design  -->
+                            <Border
+                                Margin="5"
+                                Padding="10"
+                                BackgroundColor="White"
+                                Stroke="#E0E0E0"
+                                StrokeShape="RoundRectangle 10"
+                                StrokeThickness="1">
+                                <Grid ColumnDefinitions="*, *" RowDefinitions="*, *, *">
+
+                                    <!--  Toy Image  -->
+
+                                    <Image
+                                        Grid.RowSpan="3"
+                                        Aspect="AspectFit"
+                                        HeightRequest="80"
+                                        HorizontalOptions="Center"
+                                        Source="{Binding Image}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="80" />
+
+
+                                    <!--  Contact Name  -->
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding Name}"
+                                        VerticalOptions="Start" />
+
+
+
+
+                                    <!--  Phone number Label in Rounded Rectangle  -->
+
+                                    <Border
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Padding="5"
+                                        BackgroundColor="#2196F3"
+                                        HorizontalOptions="Start"
+                                        StrokeShape="RoundRectangle 15"
+                                        VerticalOptions="End">
+                                        <Label
+                                            FontSize="14"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding PhoneNumber}"
+                                            TextColor="White"
+                                            VerticalOptions="Center" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                        </SwipeView>
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <!--  End CollectionView  -->
+        </RefreshView>
+        <!--  end refresh  -->
+
+    </Grid>
+</ContentPage>

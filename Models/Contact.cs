@@ -12,6 +12,8 @@ namespace PhoneBook.Models
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string? Image { get; set; }
+
+        public string? CountryFlag { get; set; }
         public ContactTypes? Type { get; set; }
     }
 }

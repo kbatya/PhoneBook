@@ -6,7 +6,7 @@
     xmlns:helpers="clr-namespace:PhoneBook.Helpers"
     xmlns:local="clr-namespace:PhoneBook.Views"
     xmlns:viewModels="clr-namespace:PhoneBook.ViewModels"
-    Title="AddContactPage"
+    Title="Add Contact Page"
     x:DataType="viewModels:AddContactsPageViewModel">
     <VerticalStackLayout>
         <!--  Screen Title  -->
@@ -28,8 +28,8 @@
             Margin="15"
             ColumnDefinitions="*,2*"
             ColumnSpacing="2"
-            RowDefinitions="*,*,*"
-            RowSpacing="13">
+            RowDefinitions="*,*,*,*"
+            RowSpacing="2">
 
             <!--  Contact name and error messaage line 0  -->
 
@@ -68,19 +68,34 @@
                 SelectedItem="{Binding SelectedType}"
                 TextColor="DarkBlue"
                 TitleColor="RosyBrown"
-                ToolTipProperties.Text="select between family,work,cellular" />
+                ToolTipProperties.Text="select between types" />
 
             <!--  Contact phone number line 2  -->
             <Label
                 Grid.Row="2"
                 Text="Phone number"
                 VerticalOptions="Center" />
-            <Editor
+            <Entry
                 Grid.Row="2"
                 Grid.Column="1"
+                ClearButtonVisibility="WhileEditing"
                 Keyboard="Telephone"
                 Placeholder="Phone number"
-                Text="{Binding PhoneNumber}" />
+                ReturnType="Next"
+                Text="{Binding PhoneNumber}"
+                VerticalOptions="Center" />
+
+            <!--  error message  -->
+            <Label
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="0,65,0,0"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                IsVisible="{Binding HasErrorPhone}"
+                Text="{Binding ErrorMessagePhone}"
+                TextColor="Red" />
+
         </Grid>
 
         <!--  כפתורי פעולה  -->

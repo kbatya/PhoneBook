@@ -57,7 +57,23 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\MaterialSymbolsOutlined-Bold.ttf" />
+	  <None Remove="Resources\Images\Contact.png" />
+	  <None Remove="Resources\Images\contact_phone.png" />
+	  <None Remove="Resources\Images\france.png" />
+	  <None Remove="Resources\Images\iran.png" />
+	  <None Remove="Resources\Images\khameini.jpg" />
 	  <None Remove="Resources\Images\login_image.png" />
+	  <None Remove="Resources\Images\logout.png" />
+	  <None Remove="Resources\Images\macron.jpg" />
+	  <None Remove="Resources\Images\putin.jpg" />
+	  <None Remove="Resources\Images\review_contact.png" />
+	  <None Remove="Resources\Images\russia.png" />
+	  <None Remove="Resources\Images\south_kore.png" />
+	  <None Remove="Resources\Images\starmer.jpg" />
+	  <None Remove="Resources\Images\trump.jpg" />
+	  <None Remove="Resources\Images\united_kingdom.png" />
+	  <None Remove="Resources\Images\united_states.png" />
+	  <None Remove="Resources\Images\yeol.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -70,6 +86,12 @@
 	  <Compile Update="Views\AddContactPage.xaml.cs">
 	    <DependentUpon>AddContactPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\ContactsViewPage.xaml.cs">
+	    <DependentUpon>ContactsViewPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\UserUpdatePage.xaml.cs">
+	    <DependentUpon>UserUpdatePage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,10 +101,16 @@
 	  <MauiXaml Update="Views\ContactDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ContactsViewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ViewContactsPage.xaml">
+	  <MauiXaml Update="Views\UserUpdatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\RegistrationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

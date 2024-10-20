@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PhoneBook.Views.RegistrationPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:PhoneBook.ViewModels"
+    x:DataType="viewModels:RegistrationPageViewModel"
+    Title="Registration Page">
+    <VerticalStackLayout
+        Padding="30,0"
+        Spacing="25"
+        VerticalOptions="Center">
+        <Entry
+            x:Name="NameEntry"
+            Placeholder="Name"
+            Text="{Binding Name}" />
+        <Label
+            Margin="0,65,0,0"
+            FontSize="20"
+            HorizontalTextAlignment="Center"
+            IsVisible="{Binding HasErrorName}"
+            Text="{Binding ErrorMessageName}"
+            TextColor="Red" />
+        <Entry
+            x:Name="UsernameEntry"
+            Placeholder="Username"
+            Text="{Binding Username}" />
+        <Label
+            Margin="0,65,0,0"
+            FontSize="20"
+            HorizontalTextAlignment="Center"
+            IsVisible="{Binding HasErrorUsername}"
+            Text="{Binding ErrorMessageUsername}"
+            TextColor="Red" />
+
+
+
+        <Entry
+            x:Name="PasswordEntry"
+            IsPassword="True"
+            Placeholder="Password"
+            Text="{Binding Password}" />
+
+
+        <Label
+            Margin="0,65,0,0"
+            FontSize="20"
+            HorizontalTextAlignment="Center"
+            IsVisible="{Binding HasErrorPassword}"
+            Text="{Binding ErrorMessagePassword}"
+            TextColor="Red" />
+
+        <Button
+            Command="{Binding AddUserCommand}"
+            CommandParameter="{Binding Text, Source={x:RelativeSource Mode=Self}}"
+            IsEnabled="{Binding CanAddUser}"
+            Text="Register" />
+
+    </VerticalStackLayout>
+</ContentPage>

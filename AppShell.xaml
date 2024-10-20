@@ -3,13 +3,50 @@
     x:Class="PhoneBook.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:PhoneBook"
-    Shell.FlyoutBehavior="Disabled"
+    xmlns:local="clr-namespace:PhoneBook.Views"
     Title="PhoneBook">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!--  כותרת תפריט  -->
+    <Shell.FlyoutHeader>
+        <StackLayout BackgroundColor="Green">
+            <Label Text="My Contacts" />
 
+        </StackLayout>
+    </Shell.FlyoutHeader>
+
+    <!-- flow menu  -->
+    <FlyoutItem Title="Contact" Icon="contact_phone.png">
+        <!--  TAB  -->
+        <Tab Title="Add contact" Icon="contact.png">
+            <ShellContent
+                Title="Add a new contact"
+                ContentTemplate="{DataTemplate local:AddContactsPage}"
+                Route="MainPage" />
+
+        </Tab>
+
+        <Tab Title="Lists" Icon="review_contact.png">
+            <ShellContent
+                Title="Contacts list"
+                ContentTemplate="{DataTemplate local:ContactsViewPage}"
+                Route="Contacts" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="User profile" Icon="profile.png">
+        <!--  TAB  -->
+        <Tab Title="User profile" Icon="profile.png">
+            <ShellContent
+            Title="User profile"
+            ContentTemplate="{DataTemplate local:UserUpdatePage}"
+            Route="Profile" />
+
+        </Tab>
+
+
+
+    </FlyoutItem>
+
+    <MenuItem IconImageSource="logout.png"
+              Text="Logout"
+              Command="{Binding LogoutCommand}" />
 </Shell>

@@ -1,12 +1,15 @@
+
 using PhoneBook.ViewModels;
-namespace PhoneBook.Views
+
+namespace PhoneBook.Views;
+
+public partial class LoginPage : ContentPage
 {
-	public partial class LoginPage : ContentPage
-	{
-		public LoginPage()
-		{
-			InitializeComponent();
-			BindingContext = new LoginViewModel();
-		}
-	}
+    public LoginPage(LoginPageViewModel vm)
+    {
+        
+        InitializeComponent();
+        this.BindingContext = vm;
+
+    }
 }

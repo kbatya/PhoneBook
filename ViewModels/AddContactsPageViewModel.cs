@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -8,29 +11,20 @@ using System.Windows.Input;
 using PhoneBook.Helpers;
 using PhoneBook.Models;
 using Contact = PhoneBook.Models.Contact;
+using PhoneBook.Services;
 namespace PhoneBook.ViewModels
 {
     class AddContactsPageViewModel : ViewModelBase
     {
         #region list of Contacts and Contacts Type will be moved to Service Folder
-        List<Contact> Contacts = new();//רשימת הצעצועים
+        List<Contact> contacts = new();//list of contacts
+        private ContactService contactService;
         public List<ContactTypes> ContactTypes
-        { get; set; } = new List<ContactTypes>()
-        {
-            new ContactTypes()
+        { get
             {
-                Id = 1, Name = "cellular"
-            },
-
-            new ContactTypes()
-            {
-            Id = 2, Name = "work"
-            },
-            new ContactTypes()
-            {
-            Id = 3, Name = "family"
+                return contactService.GetContactTypes();
             }
-        };
+        }
 
         #endregion
 
@@ -39,7 +33,8 @@ namespace PhoneBook.ViewModels
 
         private string name;//contact name    
         private string phoneNumber;//phone number
-        private string errorMessage;//error message
+        private string errorMessage;//error message for name
+        private string errorMessagePhone; ////error message for phone
         private ContactTypes selectedType;//selected contact type
 
         #endregion
@@ -80,7 +75,8 @@ namespace PhoneBook.ViewModels
 
                     phoneNumber = value;
                     OnPropertyChanged(nameof(PhoneNumber));
-                   
+                    HandleErrorPhone();//phone validation
+
                 }
 
             }
@@ -90,7 +86,16 @@ namespace PhoneBook.ViewModels
         {
             get
             {
-                return string.IsNullOrEmpty(Name) || !ValidName();
+                return string.IsNullOrEmpty(Name) || !ValidName() ; 
+            }
+
+        }
+
+        public bool HasErrorPhone
+        {
+            get
+            {
+                return string.IsNullOrEmpty(PhoneNumber) || !ValidPhone();
             }
 
         }
@@ -110,7 +115,22 @@ namespace PhoneBook.ViewModels
                 }
             }
         }
-        
+
+        public string ErrorMessagePhone
+        {
+            get
+            {
+                return errorMessagePhone;
+            }
+            set
+            {
+                if (errorMessagePhone != value)
+                {
+                    errorMessagePhone = value;
+                    OnPropertyChanged(nameof(ErrorMessagePhone));
+                }
+            }
+        }
         //selected contact type
         public ContactTypes SelectedType
         {
@@ -124,15 +144,17 @@ namespace PhoneBook.ViewModels
                 {
                     selectedType = value;
                     OnPropertyChanged(nameof(SelectedType));
+
                 }
             }
         }
+            
         //checking possibility of adding a contact
         public bool CanAddContact
         {
             get
             {
-                return !HasError  && SelectedType != null;
+                return !(HasError || HasErrorPhone);
             }
         }
 
@@ -152,7 +174,7 @@ namespace PhoneBook.ViewModels
             //connect the property with the action method to perform
             //Command([method Name]) --> for void methods
             //Command<type>([method name]--> for methods that has parameters
-
+            contactService = new ContactService();
             AddContactCommand = new Command<string>(AddnewContact);
 
         }
@@ -163,13 +185,25 @@ namespace PhoneBook.ViewModels
         //error logics
         private void HandleError()
         {
+            ErrorMessage = string.Empty;
             if (!ValidName())
             {
                 ErrorMessage = "The name is too short or consists invalid characters";
             }
-            else
-                ErrorMessage = string.Empty;
+            
             OnPropertyChanged(nameof(HasError));
+            OnPropertyChanged(nameof(CanAddContact));
+        }
+
+        private void HandleErrorPhone()
+        {
+            ErrorMessagePhone = string.Empty;
+            
+            if (!ValidPhone())
+            {
+                ErrorMessagePhone= "The phone number is illegal";
+            }
+            OnPropertyChanged(nameof(HasErrorPhone));
             OnPropertyChanged(nameof(CanAddContact));
         }
 
@@ -182,18 +216,37 @@ namespace PhoneBook.ViewModels
 
         private bool ValidName()
         {
-            Regex reg = new Regex(@"^[A - Z][a - zA - Z']{2,}(?:[-\s][A-Z]?[a-zA-Z'] *) * $");
+            if (string.IsNullOrEmpty(Name))
+                return false;
+            Regex reg = new Regex(@"^[A-Z][a-zA-Z\-\s']{3,}$");
             return reg.IsMatch(Name);
+        }
+
+        /* pattern for legal Israeli phone numbers
+         Landlines(area codes 2, 3, 4, 8, 9) :
+        02-1234567, 03-1234567 ,+97221234567 ,97231234567
+        Mobile numbers(area code 5):
+        050-1234567, 0501234567, +972501234567, 972501234567
+        It allows for optional hyphens and can handle numbers with or without
+        the country code(+972 or 972).*/
+        private bool ValidPhone()
+        {
+            if (string.IsNullOrEmpty(PhoneNumber))
+            {
+                return false; 
+            }
+            Regex reg = new Regex(@"^(?:(?:(\+972|972|0)(?:-)?([23489])(?:-)?([0-9]{3})(?:-)?([0-9]{4}))|(?:(\+972|972|0)(?:-)?([5])(?:-)?([0-9]{8})))$");
+            return reg.IsMatch(PhoneNumber);
         }
         #endregion
 
         //Adding a new contact
         private void AddnewContact(string name)
         {
-            string phoneNumber = "0586278749";
-            newContact = new Contact() { Id = 1, Name = name,PhoneNumber = phoneNumber,  Type = SelectedType };
             
-            Contacts.Add(newContact);
+            newContact = new Contact() { Id = 1, Name = name,PhoneNumber = PhoneNumber,  Type = SelectedType };
+            
+            contacts.Add(newContact);
 
 
 

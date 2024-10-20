@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PhoneBook.Views.UserUpdatePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:PhoneBook.ViewModels"
+    x:DataType="viewModels:UserUpdatePageViewModel"
+    >
+
+    <Shell.TitleView>
+        <Grid>
+            <Label
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Center"
+                Text="User profile"
+                TextColor="Purple"
+                VerticalOptions="Start" />
+        </Grid>
+    </Shell.TitleView>
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25"
+            VerticalOptions="Center">
+            <Entry
+                x:Name="NameEntry"
+                Placeholder="Name"
+                Text="{Binding Name}" />
+            <Label
+                Margin="0,65,0,0"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                IsVisible="{Binding HasErrorName}"
+                Text="{Binding ErrorMessageName}"
+                TextColor="Red" />
+            <Label Text="{Binding Username}" />
+
+
+
+
+            <Entry
+                x:Name="PasswordEntry"
+                IsPassword="True"
+                Placeholder="Password"
+                Text="{Binding Password}" />
+
+
+            <Label
+                Margin="0,65,0,0"
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                IsVisible="{Binding HasErrorPassword}"
+                Text="{Binding ErrorMessagePassword}"
+                TextColor="Red" />
+
+            <Button
+                Command="{Binding UpdateUserCommand}"
+                CommandParameter="{Binding Text, Source={x:RelativeSource Mode=Self}}"
+                IsEnabled="{Binding CanUpdateUser}"
+                Text="Save" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

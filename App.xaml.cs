@@ -1,13 +1,15 @@
 ﻿using PhoneBook.Views;
+using PhoneBook.Models;
 namespace PhoneBook
 {
     public partial class App : Application
     {
-        public App()
+        public static User? user;
+        public App(LoginPage page)
         {
             InitializeComponent();
-
-            MainPage = new AddContactsPage();
+            
+            MainPage = page;
         }
     }
 }
